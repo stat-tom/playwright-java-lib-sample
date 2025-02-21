@@ -3,12 +3,10 @@ package com.serenitydojo.playwright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-//@UsePlaywright
 public class SearchByKeywordTest extends BaseTest {
 
     @Test
-    void shouldShowThePageTitle() {
-        page.navigate("https://practicesoftwaretesting.com");
+    void shouldShowMatchingResults() {
         page.locator("[placeholder=Search]").fill("pliers");
         page.locator("button:has-text('Search')").click();
 

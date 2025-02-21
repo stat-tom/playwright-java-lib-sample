@@ -2,7 +2,6 @@ package com.serenitydojo.playwright;
 
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
-
 import java.util.Arrays;
 
 public class BaseTest {
@@ -25,6 +24,7 @@ public class BaseTest {
     @BeforeEach
     public void setUp() {
         page = browserContext.newPage();
+        page.navigate("https://practicesoftwaretesting.com");
     }
 
     @AfterAll
