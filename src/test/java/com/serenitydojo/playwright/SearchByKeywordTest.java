@@ -1,15 +1,13 @@
 package com.serenitydojo.playwright;
 
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-@UsePlaywright
-public class SearchByKeywordTest {
+//@UsePlaywright
+public class SearchByKeywordTest extends BaseTest {
 
     @Test
-    void shouldShowThePageTitle(Page page) {
+    void shouldShowThePageTitle() {
         page.navigate("https://practicesoftwaretesting.com");
         page.locator("[placeholder=Search]").fill("pliers");
         page.locator("button:has-text('Search')").click();
