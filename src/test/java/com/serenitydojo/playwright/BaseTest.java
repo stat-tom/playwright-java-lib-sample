@@ -25,6 +25,7 @@ public class BaseTest {
     public void setUp() {
         page = browserContext.newPage();
         page.navigate("https://practicesoftwaretesting.com");
+        playwright.selectors().setTestIdAttribute("data-test");
     }
 
     @AfterAll
