@@ -1,36 +1,20 @@
 package com.serenitydojo.playwright;
 
 import com.microsoft.playwright.*;
-import org.junit.jupiter.api.*;
+import com.microsoft.playwright.junit.Options;
+import com.microsoft.playwright.junit.OptionsFactory;
+
 import java.util.Arrays;
 
-public class BaseTest {
-    private static Playwright playwright;
-    private static Browser browser;
-    private static BrowserContext browserContext;
-    Page page;
+public class BaseTest implements OptionsFactory {
 
-    @BeforeAll
-    public static void setUpBrowser() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(
+    @Override
+    public Options getOptions() {
+        return new Options().setLaunchOptions(
                 new BrowserType.LaunchOptions()
-                        .setHeadless(false)
                         .setArgs(Arrays.asList("--disable-extensions"))
-        );
-        browserContext = browser.newContext();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        page = browserContext.newPage();
-        page.navigate("https://practicesoftwaretesting.com");
-        playwright.selectors().setTestIdAttribute("data-test");
-    }
-
-    @AfterAll
-    public static void tearDownBrowser() {
-        browser.close();
-        playwright.close();
+                        ).setHeadless(true)
+                        .setTestIdAttribute("data-test");
     }
 }
+
