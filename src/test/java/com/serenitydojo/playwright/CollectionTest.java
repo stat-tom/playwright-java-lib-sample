@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,13 @@ import java.util.Optional;
 @UsePlaywright(BaseTest.class)
 public class CollectionTest {
 
+    @BeforeEach
+    void setUp(Page page) {
+        BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+    }
+
     @Test
     void shouldShowCollectionOfItems(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
         List<String> itemNames = page.getByTestId("product-name").allTextContents();
         System.out.println(itemNames);
 
@@ -31,7 +36,6 @@ public class CollectionTest {
 
     @Test
     void shouldShowOutOfStockItems(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
         List<String> oosProducts = page.locator(".card")
                 .filter(new Locator.FilterOptions().setHas(page.getByText("Out of stock")))
                 .getByTestId("product-name")

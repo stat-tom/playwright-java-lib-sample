@@ -3,14 +3,19 @@ package com.serenitydojo.playwright;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.junit.UsePlaywright;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @UsePlaywright(BaseTest.class)
 public class FindElementByTextTest {
 
+    @BeforeEach
+    void setUp(Page page) {
+        BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+    }
+
     @Test
     void shouldShowElementByText(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
         page.getByText("Bolt Cutters").click();
 
         PlaywrightAssertions.assertThat(page.getByText("MightyCraft Hardware")).isVisible();
@@ -18,7 +23,6 @@ public class FindElementByTextTest {
 
     @Test
     void shouldShowElementByAltText(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
         page.getByAltText("Long Nose Pliers").click();
 
         PlaywrightAssertions.assertThat(page.getByText("MightyCraft Hardware")).isVisible();
@@ -26,7 +30,6 @@ public class FindElementByTextTest {
 
     @Test
     void shouldShowElementByTitle(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
         page.getByAltText("Slip Joint Pliers").click();
         page.getByTitle("Practice Software Testing - Toolshop").click();
 

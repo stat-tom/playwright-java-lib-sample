@@ -3,17 +3,20 @@ package com.serenitydojo.playwright;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.junit.UsePlaywright;
-import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @UsePlaywright(BaseTest.class)
 public class ValidateLoginTest {
 
+    @BeforeEach
+    void setUp(Page page) {
+        BaseTest.openPage(page, "https://practicesoftwaretesting.com/auth/login");
+    }
+
     @Test
     void shouldShowEmailAndPasswordValidationError(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.locator(".btnSubmit").click();
 
         PlaywrightAssertions.assertThat(page.locator("#email-error")).isVisible();
@@ -22,8 +25,6 @@ public class ValidateLoginTest {
 
     @Test
     void shouldShowEmailValidationError(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.locator("#password").fill("topSecret");
         page.locator(".btnSubmit").click();
 
@@ -32,8 +33,6 @@ public class ValidateLoginTest {
 
     @Test
     void shouldShowPasswordValidationError(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.locator("#email").fill("a@b.c");
         page.locator(".btnSubmit").click();
 
@@ -42,8 +41,6 @@ public class ValidateLoginTest {
 
     @Test
     void shouldShowPasswordTest(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.locator("#password").fill("topSecret");
         page.locator(".input-group-append").click();
 
@@ -53,8 +50,6 @@ public class ValidateLoginTest {
 
     @Test
     void shouldOpenSignUpTest(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.getByTestId("register-link").click();
         String actualText = page.locator("h3").innerText();
 
@@ -63,8 +58,6 @@ public class ValidateLoginTest {
 
     @Test
     void shouldOpenForgotPasswordTest(Page page) {
-        page.navigate("https://practicesoftwaretesting.com");
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sign in")).click();
         page.getByTestId("forgot-password-link").click();
         String actualText = page.locator("h3").innerText();
 
