@@ -1,42 +1,49 @@
 package tests;
 
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pages.LoginPage;
 
 @UsePlaywright(BaseTest.class)
 public class ValidateLoginTest {
 
+    private LoginPage loginPage;
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com/auth/login");
+        loginPage = new LoginPage(page);
     }
 
     @Test
-    void shouldShowEmailAndPasswordValidationError(Page page) {
-        page.locator(".btnSubmit").click();
-
-        PlaywrightAssertions.assertThat(page.locator("#email-error")).isVisible();
-        PlaywrightAssertions.assertThat(page.locator("#password-error")).isVisible();
+    void shouldShowNoEmailAndPasswordValidationError() {
+        loginPage.clickSubmitBtn();
+        loginPage.emailError();
+        loginPage.passwordError();
     }
 
     @Test
-    void shouldShowEmailValidationError(Page page) {
-        page.locator("#password").fill("topSecret");
-        page.locator(".btnSubmit").click();
-
-        PlaywrightAssertions.assertThat(page.locator("#email-error")).isVisible();
+    void shouldShowEmailValidationError() {
+        loginPage.passwordInput("topSecret");
+        loginPage.clickSubmitBtn();
+        loginPage.emailError();
     }
 
     @Test
-    void shouldShowPasswordValidationError(Page page) {
-        page.locator("#email").fill("a@b.c");
-        page.locator(".btnSubmit").click();
+    void shouldShowPasswordValidationError() {
+        loginPage.emailInput("a@b.c");
+        loginPage.clickSubmitBtn();
+        loginPage.passwordError();
+    }
 
-        PlaywrightAssertions.assertThat(page.locator("#password-error")).isVisible();
+    @Test
+    void shouldShowWrongEmailAndPasswordValidationError() {
+        loginPage.emailInput("a@b.c");
+        loginPage.passwordInput("topSecret");
+        loginPage.clickSubmitBtn();
+        loginPage.loginError();
     }
 
     @Test
@@ -49,17 +56,17 @@ public class ValidateLoginTest {
     }
 
     @Test
-    void shouldOpenSignUpTest(Page page) {
-        page.getByTestId("register-link").click();
-        String actualText = page.locator("h3").innerText();
+    void shouldOpenSignUpTest() {
+        loginPage.clickRegisterLink();
+        String actualText = loginPage.h3Text();
 
         Assertions.assertEquals("Customer registration", actualText, "Text content does not match!");
     }
 
     @Test
     void shouldOpenForgotPasswordTest(Page page) {
-        page.getByTestId("forgot-password-link").click();
-        String actualText = page.locator("h3").innerText();
+        loginPage.clickForgotPasswordLink();
+        String actualText = loginPage.h3Text();
 
         Assertions.assertEquals("Forgot Password", actualText, "Text content does not match!");
     }
