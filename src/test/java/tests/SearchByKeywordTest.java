@@ -1,4 +1,4 @@
-package com.serenitydojo.playwright;
+package tests;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @UsePlaywright(BaseTest.class)
-public class ValidatePageTitleTest {
+public class SearchByKeywordTest {
 
     @BeforeEach
     void setUp(Page page) {
@@ -15,9 +15,12 @@ public class ValidatePageTitleTest {
     }
 
     @Test
-    void shouldShowThePageTitle(Page page) {
-        String title = page.title();
+    void shouldShowMatchingResults(Page page) {
+        page.getByPlaceholder("Search").fill("pliers");
+        page.locator("button:has-text('Search')").click();
 
-        Assertions.assertTrue(title.contains("Practice Software Testing"));
+        int matchingSearchResults = page.locator(".card").count();
+
+        Assertions.assertTrue(matchingSearchResults > 0);
     }
 }

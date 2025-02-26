@@ -1,6 +1,7 @@
-package com.serenitydojo.playwright;
+package tests;
 
-import com.microsoft.playwright.*;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.Options;
 import com.microsoft.playwright.junit.OptionsFactory;
 

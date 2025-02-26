@@ -1,4 +1,4 @@
-package com.serenitydojo.playwright;
+package tests;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -6,6 +6,7 @@ import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.Optional;
 
