@@ -20,4 +20,12 @@ public class HomePage extends BasePage {
     public int getSearchResultsCount() {
         return page.locator(".card").count();
     }
+
+    public String getProductTitle() {
+        return page.getByTestId("page-title").innerText();
+    }
+
+    public String getTitle() {
+        return page.title();
+    }
 }

@@ -5,21 +5,23 @@ import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pages.HomePage;
 
 @UsePlaywright(BaseTest.class)
 public class SearchByKeywordTest {
 
+    private HomePage homePage;
+
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+        homePage = new HomePage(page);
     }
 
     @Test
-    void shouldShowMatchingResults(Page page) {
-        page.getByPlaceholder("Search").fill("pliers");
-        page.locator("button:has-text('Search')").click();
-
-        int matchingSearchResults = page.locator(".card").count();
+    void shouldShowMatchingResults() {
+        homePage.searchForProduct("pliers");
+        int matchingSearchResults = homePage.getSearchResultsCount();
 
         Assertions.assertTrue(matchingSearchResults > 0);
     }

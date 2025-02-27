@@ -12,6 +12,7 @@ public class FindElementByTextTest {
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+
     }
 
     @Test

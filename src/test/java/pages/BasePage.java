@@ -12,8 +12,4 @@ public class BasePage {
     public void navigateTo(String url) {
         page.navigate(url);
     }
-
-    public String getTitle() {
-        return page.title();
-    }
 }

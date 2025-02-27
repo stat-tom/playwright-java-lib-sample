@@ -4,6 +4,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import pages.LoginPage;
 
@@ -18,6 +19,7 @@ public class ValidateLoginTest {
     }
 
     @Test
+    @Tag("smoke")
     void shouldShowNoEmailAndPasswordValidationError() {
         loginPage.clickSubmitBtn();
         loginPage.emailError();
