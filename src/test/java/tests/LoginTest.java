@@ -12,6 +12,7 @@ import pages.LoginPage;
 public class LoginTest {
 
     private LoginPage loginPage;
+
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com/auth/login");

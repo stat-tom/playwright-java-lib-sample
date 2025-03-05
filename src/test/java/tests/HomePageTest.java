@@ -3,18 +3,47 @@ package tests;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
+import com.microsoft.playwright.options.LoadState;
 import org.junit.jupiter.api.*;
 import org.assertj.core.api.Assertions;
+import pages.HomePage;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @UsePlaywright(BaseTest.class)
-public class CollectionTest {
+public class HomePageTest {
+
+    private HomePage homePage;
 
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+        homePage = new HomePage(page);
+    }
+
+    @Test
+    void shouldSortInAlphabeticalOrder(Page page) {
+        homePage.sortAZ();
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+
+        List<String> itemNames = page.getByTestId("product-name").allTextContents();
+
+        Assertions.assertThat(itemNames)
+                .isSorted()
+                .isSortedAccordingTo(String.CASE_INSENSITIVE_ORDER);
+    }
+
+    @Test
+    void shouldSortInReverseOrder(Page page) {
+        homePage.sortZA();
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+
+        List<String> itemNames = page.getByTestId("product-name").allTextContents();
+
+        Assertions.assertThat(itemNames)
+                .isSortedAccordingTo(Comparator.reverseOrder());
     }
 
     @Test

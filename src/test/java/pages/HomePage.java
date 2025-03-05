@@ -28,4 +28,12 @@ public class HomePage extends BasePage {
     public String getTitle() {
         return page.title();
     }
+
+    public void sortAZ() {
+        page.getByLabel("Sort").selectOption("Name (A - Z)");
+    }
+
+    public void sortZA() {
+        page.getByLabel("Sort").selectOption("Name (Z - A)");
+    }
 }
