@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import pages.LoginPage;
 
 @UsePlaywright(BaseTest.class)
-public class ValidateLoginTest {
+public class LoginTest {
 
     private LoginPage loginPage;
     @BeforeEach

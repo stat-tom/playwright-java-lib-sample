@@ -3,9 +3,8 @@ package tests;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.assertj.core.api.Assertions;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,16 +22,16 @@ public class CollectionTest {
         List<String> itemNames = page.getByTestId("product-name").allTextContents();
         System.out.println(itemNames);
 
-        Assertions.assertFalse(itemNames.isEmpty(), "Expected at least 1 item in the collection");
+        Assertions.assertThat(itemNames).isNotEmpty();
 
         String actualItem = itemNames.get(2).trim();
-        Assertions.assertEquals("Bolt Cutters", actualItem, "Third item should be 'Bolt Cutters'");
+        Assertions.assertThat(actualItem).isEqualTo("Bolt Cutters");
 
         Optional<String> foundItem = itemNames.stream()
                 .map(String::trim)
                 .filter(item -> item.equals("Thor Hammer"))
                 .findFirst();
-        Assertions.assertTrue(foundItem.isPresent(), "'Thor Hammer' should be present in the collection");
+        Assertions.assertThat(foundItem).isPresent();
     }
 
     @Test
@@ -43,6 +42,27 @@ public class CollectionTest {
                 .allTextContents();
         System.out.println(oosProducts);
 
-        Assertions.assertFalse(oosProducts.isEmpty(), "Expected at least 1 out of stock item in the collection");
+        Assertions.assertThat(oosProducts).isNotEmpty();
+    }
+
+    @Test
+    void allProductPricesShouldBeCorrectValues(Page page) {
+        List<Double> prices = page.getByTestId("product-price")
+                .allTextContents()
+                .stream()
+                .map(price -> Double.parseDouble(price.replace("$", "")))
+                .toList();
+
+        Assertions.assertThat(prices)
+                .isNotEmpty()
+                .allMatch(price -> price > 0, "Price should be greater than 0")
+                .doesNotContain(0.0)
+                .allSatisfy(price -> Assertions.assertThat(price).isBetween(0.0, 1000.0));
+
+        prices.forEach(price -> {
+            Assertions.assertThat(String.format("%.2f", price))
+                    .as("Price format is incorrect")
+                    .matches("\\d{1,3}\\.\\d{2}");
+        });
     }
 }
