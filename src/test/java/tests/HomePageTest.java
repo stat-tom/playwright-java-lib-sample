@@ -20,12 +20,30 @@ public class HomePageTest {
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+        page.waitForSelector(".card-img-top");
         homePage = new HomePage(page);
     }
 
     @Test
+    void shouldShowAllProductsNames(Page page) {
+        List<String> itemNames = page.getByTestId("product-name").allInnerTexts();
+        Assertions.assertThat(itemNames).contains("Pliers", "Bolt Cutters", "Thor Hammer");
+    }
+
+    @Test
+    void shouldShowAllProductsImages(Page page) {
+        List<String> itemImageTitles = page.locator(".card-img-top")
+                .all()
+                .stream()
+                .map(img -> img.getAttribute("alt"))
+                .toList();
+
+        Assertions.assertThat(itemImageTitles).contains("Pliers", "Bolt Cutters", "Thor Hammer");
+    }
+
+    @Test
     void shouldSortInAlphabeticalOrder(Page page) {
-        homePage.sortAZ();
+        homePage.sortAtoZ();
         page.waitForLoadState(LoadState.NETWORKIDLE);
 
         List<String> itemNames = page.getByTestId("product-name").allTextContents();
@@ -37,7 +55,7 @@ public class HomePageTest {
 
     @Test
     void shouldSortInReverseOrder(Page page) {
-        homePage.sortZA();
+        homePage.sortZtoA();
         page.waitForLoadState(LoadState.NETWORKIDLE);
 
         List<String> itemNames = page.getByTestId("product-name").allTextContents();
@@ -48,16 +66,15 @@ public class HomePageTest {
 
     @Test
     void shouldShowCollectionOfItems(Page page) {
-        List<String> itemNames = page.getByTestId("product-name").allTextContents();
+        List<String> itemNames = page.getByTestId("product-name").allInnerTexts();
         System.out.println(itemNames);
 
         Assertions.assertThat(itemNames).isNotEmpty();
 
-        String actualItem = itemNames.get(2).trim();
+        String actualItem = itemNames.get(2);
         Assertions.assertThat(actualItem).isEqualTo("Bolt Cutters");
 
         Optional<String> foundItem = itemNames.stream()
-                .map(String::trim)
                 .filter(item -> item.equals("Thor Hammer"))
                 .findFirst();
         Assertions.assertThat(foundItem).isPresent();
@@ -94,4 +111,6 @@ public class HomePageTest {
                     .matches("\\d{1,3}\\.\\d{2}");
         });
     }
+
+
 }

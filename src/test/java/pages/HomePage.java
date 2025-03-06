@@ -29,11 +29,11 @@ public class HomePage extends BasePage {
         return page.title();
     }
 
-    public void sortAZ() {
+    public void sortAtoZ() {
         page.getByLabel("Sort").selectOption("Name (A - Z)");
     }
 
-    public void sortZA() {
+    public void sortZtoA() {
         page.getByLabel("Sort").selectOption("Name (Z - A)");
     }
 }
