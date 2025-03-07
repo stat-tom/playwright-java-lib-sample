@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @UsePlaywright(BaseTest.class)
 public class HomePageTest {
 
@@ -39,6 +41,13 @@ public class HomePageTest {
                 .toList();
 
         Assertions.assertThat(itemImageTitles).contains("Pliers", "Bolt Cutters", "Thor Hammer");
+    }
+
+    @Test
+    void shouldWaitForTheFilterCheckboxes(Page page) {
+        var screwdriverFilter = page.getByLabel("Screwdriver");
+        screwdriverFilter.click();
+        assertThat(screwdriverFilter.isChecked()).isTrue();
     }
 
     @Test

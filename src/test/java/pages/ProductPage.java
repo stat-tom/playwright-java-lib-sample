@@ -2,6 +2,9 @@ package pages;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
+
+import java.util.List;
 
 public class ProductPage extends BasePage {
 
@@ -18,5 +21,11 @@ public class ProductPage extends BasePage {
                 .getByText("Categories")
                 .click();
         page.locator(".dropdown-menu").getByText(category).click();
+    }
+
+    public List<String> getProductNames() {
+        page.waitForSelector(".card");
+//        page.waitForSelector(".card", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(2000));
+        return page.getByTestId("product-name").allInnerTexts();
     }
 }
