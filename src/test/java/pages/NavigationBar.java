@@ -9,14 +9,12 @@ public class NavigationBar extends BasePage {
         super(page);
     }
 
-    public String getProductTitle() {
-        return page.getByTestId("page-title").innerText();
-    }
-
     public void clickOnCategory(String category) {
         page.getByRole(AriaRole.MENUBAR, new Page.GetByRoleOptions().setName("Main Menu"))
                 .getByText("Categories")
                 .click();
         page.locator(".dropdown-menu").getByText(category).click();
     }
+
+
 }

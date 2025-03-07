@@ -28,4 +28,8 @@ public class ProductPage extends BasePage {
 //        page.waitForSelector(".card", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(2000));
         return page.getByTestId("product-name").allInnerTexts();
     }
+
+    public void addToCart() {
+        page.getByText("Add to cart").click();
+    }
 }

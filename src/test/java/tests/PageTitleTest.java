@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import pages.HomePage;
 
 @UsePlaywright(BaseTest.class)
-public class ValidatePageTitleTest {
+public class PageTitleTest {
 
     private HomePage homePage;
 
@@ -20,7 +20,7 @@ public class ValidatePageTitleTest {
 
     @Test
     void pageTitleTest() {
-        String title = homePage.getTitle();
+        String title = homePage.getPageTitle();
 
         Assertions.assertTrue(title.contains("Practice Software Testing"));
     }

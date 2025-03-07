@@ -25,7 +25,7 @@ public class HomePage extends BasePage {
         return page.getByTestId("page-title").innerText();
     }
 
-    public String getTitle() {
+    public String getPageTitle() {
         return page.title();
     }
 
@@ -35,5 +35,9 @@ public class HomePage extends BasePage {
 
     public void sortZtoA() {
         page.getByLabel("Sort").selectOption("Name (Z - A)");
+    }
+
+    public void selectProduct(String productName) {
+        page.getByText(productName).click();
     }
 }
