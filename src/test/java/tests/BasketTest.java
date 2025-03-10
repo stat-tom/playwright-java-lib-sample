@@ -2,6 +2,7 @@ package tests;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
+import com.microsoft.playwright.options.AriaRole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -10,6 +11,8 @@ import pages.HomePage;
 import pages.NavigationBar;
 import pages.PowerToolsPage;
 import pages.ProductPage;
+
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 @UsePlaywright(BaseTest.class)
 public class BasketTest {
@@ -28,9 +31,15 @@ public class BasketTest {
 
     @Test
     @Tag("smoke")
-    void shouldDisplayToasterMessage() {
+    void shouldDisplayToasterMessage(Page page) {
         homePage.selectProduct("Bolt Cutters");
         productPage.addToCart();
+
+        assertThat(page.getByRole(AriaRole.ALERT)).isVisible();
+        assertThat(page.getByRole(AriaRole.ALERT)).hasText("Product added to shopping cart.");
+
+//        page.waitForCondition(() -> page.getByTestId("cart-quantity").textContent().equals("1"));
+        page.waitForSelector("[data-test=cart-quantity]:has-text('1')");
     }
 
 
