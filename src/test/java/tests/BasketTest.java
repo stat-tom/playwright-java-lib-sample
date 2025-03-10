@@ -38,8 +38,8 @@ public class BasketTest {
         assertThat(page.getByRole(AriaRole.ALERT)).isVisible();
         assertThat(page.getByRole(AriaRole.ALERT)).hasText("Product added to shopping cart.");
 
-//        page.waitForCondition(() -> page.getByTestId("cart-quantity").textContent().equals("1"));
-        page.waitForSelector("[data-test=cart-quantity]:has-text('1')");
+        page.waitForCondition(() -> navigationBar.getCartQty().equals("1"));
+//        page.waitForSelector("[data-test=cart-quantity]:has-text('1')");
     }
 
 

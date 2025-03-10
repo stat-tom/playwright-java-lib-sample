@@ -16,5 +16,7 @@ public class NavigationBar extends BasePage {
         page.locator(".dropdown-menu").getByText(category).click();
     }
 
-
+    public String getCartQty() {
+        return page.getByTestId("cart-quantity").textContent();
+    }
 }
