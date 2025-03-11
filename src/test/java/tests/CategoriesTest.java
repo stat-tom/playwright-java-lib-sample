@@ -6,20 +6,20 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import pages.HomePage;
 import pages.PowerToolsPage;
-import pages.ProductPage;
 
 @UsePlaywright(BaseTest.class)
 public class CategoriesTest {
 
     private PowerToolsPage powerToolsPage;
-    private ProductPage productPage;
+    private HomePage homePage;
 
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com/");
         powerToolsPage = new PowerToolsPage(page);
-        productPage = new ProductPage(page);
+        homePage = new HomePage(page);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class CategoriesTest {
     void shouldFilterProductsByCategory() {
         powerToolsPage.clickOnPowerToolsCategory();
 
-        var filteredNames = productPage.getProductNames();
+        var filteredNames = homePage.getProductNames();
         Assertions.assertThat(filteredNames).contains("Belt Sander", "Cordless Drill 18V", "Circular Saw");
     }
 

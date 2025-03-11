@@ -2,6 +2,8 @@ package pages;
 
 import com.microsoft.playwright.Page;
 
+import java.util.List;
+
 public class HomePage extends BasePage {
 
     public HomePage(Page page) {
@@ -37,7 +39,27 @@ public class HomePage extends BasePage {
         page.getByLabel("Sort").selectOption("Name (Z - A)");
     }
 
+    public void sortHighToLow() {
+        page.getByTestId("sort").selectOption("Price (High - Low)");
+    }
+
+    public void sortLowToHigh() {
+        page.getByTestId("sort").selectOption("Price (Low - High)");
+    }
+
     public void selectProduct(String productName) {
         page.getByText(productName).click();
+    }
+
+    public List<String> getProductNames() {
+        page.waitForSelector(".card");
+//        page.waitForSelector(".card", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(2000));
+        return page.getByTestId("product-name").allInnerTexts();
+    }
+
+    public List<String> getProductPrices() {
+        page.waitForSelector(".card");
+//        page.waitForSelector(".card", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(2000));
+        return page.getByTestId("product-price").allInnerTexts();
     }
 }

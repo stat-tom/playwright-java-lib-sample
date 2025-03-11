@@ -23,12 +23,6 @@ public class ProductPage extends BasePage {
         page.locator(".dropdown-menu").getByText(category).click();
     }
 
-    public List<String> getProductNames() {
-        page.waitForSelector(".card");
-//        page.waitForSelector(".card", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(2000));
-        return page.getByTestId("product-name").allInnerTexts();
-    }
-
     public void addToCart() {
         page.getByText("Add to cart").click();
     }
