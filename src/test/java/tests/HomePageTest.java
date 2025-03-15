@@ -30,6 +30,14 @@ public class HomePageTest {
     }
 
     @Test
+    void shouldShowMatchingResults() {
+        homePage.searchForProduct("pliers");
+        int matchingSearchResults = homePage.getSearchResultsCount();
+
+        org.junit.jupiter.api.Assertions.assertTrue(matchingSearchResults > 0);
+    }
+
+    @Test
     void shouldShowAllProductsNames(Page page) {
         List<String> itemNames = page.getByTestId("product-name").allInnerTexts();
         Assertions.assertThat(itemNames).contains("Pliers", "Bolt Cutters", "Thor Hammer");
