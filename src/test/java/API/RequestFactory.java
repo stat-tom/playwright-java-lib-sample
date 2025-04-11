@@ -1,5 +1,6 @@
 package API;
 
+import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Page;
 import pages.BasePage;
 
@@ -15,4 +16,6 @@ public class RequestFactory extends BasePage {
                     page.getByTestId("sort").selectOption("Price (High - Low)");
                 });
     }
+
+
 }

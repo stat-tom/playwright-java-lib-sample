@@ -1,57 +1,93 @@
 package tests;
 
-import API.MockRequestFactory;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Route;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.*;
 import com.microsoft.playwright.junit.UsePlaywright;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import java.util.HashMap;
+import java.util.stream.Stream;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 @UsePlaywright(BaseTest.class)
+@Execution(ExecutionMode.SAME_THREAD)
 public class RestApiTest {
 
+    protected static Playwright playwright;
+    protected static Browser browser;
+    protected static BrowserContext browserContext;
+
+    @BeforeAll
+    static void setUpBrowser() {
+        playwright = Playwright.create();
+        playwright.selectors().setTestIdAttribute("data-test");
+        browser = playwright.chromium().launch(
+                new BrowserType.LaunchOptions().setHeadless(false)
+        );
+    }
+
+    @BeforeEach
+    void setUp(Page page) {
+        browserContext = browser.newContext();
+        BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+    }
+
     @Nested
-    class MockingApiResponses {
+    class TestApiResponses {
+        record Product(String name, Double price) {}
 
-        @BeforeEach
-        void setUp(Page page) {
-            BaseTest.openPage(page, "https://practicesoftwaretesting.com");
+        private static APIRequestContext requestContext;
+
+        @BeforeAll
+        public static void setupRequestContext() {
+            requestContext = playwright.request().newContext(
+                    new APIRequest.NewContextOptions()
+                            .setBaseURL("https://api.practicesoftwaretesting.com")
+                            .setExtraHTTPHeaders(new HashMap<>() {{
+                                put("Accept", "application/json");
+                            }})
+            );
         }
 
-        @Test
-        void whenASingleItemIsFound(Page page) {
-            page.route("**/products/search?q=Pliers", route -> {
-                route.fulfill(
-                        new Route.FulfillOptions()
-                                .setBody(MockRequestFactory.RESPONSE_WITH_A_SINGLE_ENTRY)
-                                .setStatus(200)
-                );
-            });
-
-            page.getByPlaceholder("Search").fill("Pliers");
+        @DisplayName("Check presence of known products")
+        @ParameterizedTest(name = "Checking product {0}")
+        @MethodSource("products")
+        void checkKnownProduct(Product product, Page page) {
+            page.getByPlaceholder("Search").fill(product.name);
             page.getByPlaceholder("Search").press("Enter");
 
-            assertThat(page.getByTestId("product-name")).hasCount(1);
-            assertThat(page.getByTestId("product-name")).hasText("Super Pliers");
+            Locator productCard = page.locator(".card")
+                    .filter(
+                            new Locator.FilterOptions()
+                                    .setHasText(product.name)
+                                    .setHasText(Double.toString(product.price))
+                    );
+            assertThat(productCard).isVisible();
         }
 
-        @Test
-        void whenNoItemsAreFound(Page page) {
-            page.route("**/products/search?q=Pliers", route -> {
-                route.fulfill(
-                        new Route.FulfillOptions()
-                                .setBody(MockRequestFactory.RESPONSE_WITH_NO_ENTRIES)
-                                .setStatus(200)
-                );
-            });
+        static Stream<Product> products() {
+            APIResponse response = requestContext.get("/products?page=2");
+            Assertions.assertThat(response.status()).isEqualTo(200);
 
-            page.getByPlaceholder("Search").fill("Pliers");
-            page.getByPlaceholder("Search").press("Enter");
+            JsonObject jsonObject = new Gson().fromJson(response.text(), JsonObject.class);
+            JsonArray data = jsonObject.getAsJsonArray("data");
 
-            assertThat(page.getByTestId("product-name")).hasCount(0);
-            assertThat(page.getByTestId("search_completed")).hasText("There are no products found.");
+            return data.asList().stream()
+                    .map(jsonElement -> {
+                        JsonObject productJson = jsonElement.getAsJsonObject();
+                        return new Product(
+                                productJson.get("name").getAsString(),
+                                productJson.get("price").getAsDouble()
+                        );
+                    });
         }
     }
 }
