@@ -1,6 +1,6 @@
 package tests;
 
-import API.RequestFactory;
+import API.ApiRequestFactory;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
@@ -19,14 +19,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class HomePageTest {
 
     private HomePage homePage;
-    private RequestFactory requestFactory;
+    private ApiRequestFactory apiRequestFactory;
 
     @BeforeEach
     void setUp(Page page) {
         BaseTest.openPage(page, "https://practicesoftwaretesting.com");
         page.waitForSelector(".card-img-top");
         homePage = new HomePage(page);
-        requestFactory = new RequestFactory(page);
+        apiRequestFactory = new ApiRequestFactory(page);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class HomePageTest {
     @Test
     void sortByDescendingPrice(Page page) {
 //        homePage.sortHighToLow();
-        requestFactory.waitForSortedProducts();
+        apiRequestFactory.waitForSortedProducts();
 
         var productPrices = homePage.getProductPrices()
                 .stream()

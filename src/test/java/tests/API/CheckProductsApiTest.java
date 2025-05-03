@@ -1,4 +1,4 @@
-package tests;
+package tests.API;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import tests.BaseTest;
+
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -19,7 +21,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 @UsePlaywright(BaseTest.class)
 @Execution(ExecutionMode.SAME_THREAD)
-public class RestApiTest {
+public class CheckProductsApiTest {
 
     protected static Playwright playwright;
     protected static Browser browser;

@@ -1,12 +1,11 @@
 package API;
 
-import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Page;
 import pages.BasePage;
 
-public class RequestFactory extends BasePage {
+public class ApiRequestFactory extends BasePage {
 
-    public RequestFactory(Page page) {
+    public ApiRequestFactory(Page page) {
         super(page);
     }
 
